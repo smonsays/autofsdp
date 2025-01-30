@@ -1,7 +1,7 @@
 [project]
 name = "autofsdp"
 version = "0.1.0"
-description = "Easy fully-sharded data parallelism in jax with minimal code changes."
+description = "Fully-sharded data parallelism in jax with minimal code changes."
 readme = "README.md"
 authors = [
     { name = "smonsays", email = "smonsays@users.noreply.github.com" }

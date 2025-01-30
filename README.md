@@ -1,6 +1,6 @@
 # autofsdp
 
-`autofsdp` is a utility to easily add Fully-Sharded Data Parallelism (FSDP) with minimal code changes in jax. 
+`autofsdp` is a utility to add Fully-Sharded Data Parallelism (FSDP) with minimal code changes in jax. 
 
 ## Installation
 
