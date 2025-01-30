@@ -144,7 +144,7 @@ def train(c: Config) -> None:
   @jax.jit
   def update_train_state(state: TrainState, batch: Batch) -> TrainState:
     def loss_fn(params: jt.PyTree):
-      logits = state.apply_fn({'params': state.params}, batch.x)
+      logits = state.apply_fn({'params': params}, batch.x)
       loss = optax.softmax_cross_entropy_with_integer_labels(logits, batch.y)
       return jnp.mean(loss)
 
