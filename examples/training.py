@@ -110,7 +110,7 @@ class Transformer(nn.Module):
     return nn.Dense(self.d_out, use_bias=False)(x)
 
 
-def train(c: Config):
+def train(c: Config) -> None:
   """Training loop with automatic fully-sharded data parallelism (FSDP)"""
   logging.info(f'{jax.device_count()} available devices.')
   rng = jax.random.key(c.seed)
@@ -142,7 +142,7 @@ def train(c: Config):
   # In the training loop, we only need to place a sharding constraint on the data,
   # jit then automatically handles the rest for us.
   @jax.jit
-  def update_train_state(state: TrainState, batch: Batch):
+  def update_train_state(state: TrainState, batch: Batch) -> TrainState:
     def loss_fn(params: jt.PyTree):
       logits = state.apply_fn({'params': state.params}, batch.x)
       loss = optax.softmax_cross_entropy_with_integer_labels(logits, batch.y)

@@ -1,7 +1,7 @@
 [project]
 name = "autofsdp"
 version = "0.1.0"
-description = "Add your description here"
+description = "Easy fully-sharded data parallelism in jax with minimal code changes."
 readme = "README.md"
 authors = [
     { name = "smonsays", email = "smonsays@users.noreply.github.com" }
@@ -34,7 +34,7 @@ select = [
     "F",   # pyflakes
     "E",   # pycodestyle
     "I",   # isort
-    #"ANN", # flake8 type annotations
+    "ANN", # flake8 type annotations
     "RUF", # ruff-specific rules
 ]
 fixable = ["ALL"]

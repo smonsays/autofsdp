@@ -21,13 +21,9 @@ OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 DEALINGS IN THE SOFTWARE.
 """
 
-from typing import TypeVar
-
 import jax
 import jax.sharding as shd
 import jaxtyping as jt
-
-T = TypeVar('T')
 
 
 def _fsdp_partition_spec(shape: tuple, n_devices: int) -> shd.PartitionSpec:
@@ -36,7 +32,7 @@ def _fsdp_partition_spec(shape: tuple, n_devices: int) -> shd.PartitionSpec:
   if len(shape) < 2:
     return shd.PartitionSpec()  # Replicate biases and scalars
 
-  # Shard over largest dim that is divisible by n_devices
+  # Shard over largest dimension that is divisible by n_devices
   largest_divisible = max((x for x in shape if x % n_devices == 0), default=None)
 
   partitions = [None] * len(shape)
@@ -48,7 +44,16 @@ def _fsdp_partition_spec(shape: tuple, n_devices: int) -> shd.PartitionSpec:
 
 
 def infer_fsdp_sharding(pytree: jt.PyTree, mesh: shd.Mesh) -> jt.PyTree:
-  """Infer fsdp-like sharding tree."""
+  """Infer fsdp-like sharding tree.
+
+  Args:
+    pytree: PyTree containing jax.Arrays to be sharded
+    mesh: A device mesh representing the available devices
+
+  Returns:
+    A PyTree with the same structure as the input, but with sharding
+    specifications instead of actual values.
+  """
 
   def f(x: object) -> shd.Sharding | None:
     if hasattr(x, 'shape'):
@@ -63,6 +68,17 @@ def infer_fsdp_sharding(pytree: jt.PyTree, mesh: shd.Mesh) -> jt.PyTree:
 def shard_pytree(
   pytree: jt.PyTree, shardings: jt.PyTree[shd.Sharding | None]
 ) -> jt.PyTree:
-  """Shard a pytree according to given sharding tree."""
+  """Shard a pytree according to given sharding tree.
 
-  return jax.tree.map(lambda x,s: jax.device_put(x, s), pytree, shardings)
+  Args:
+    pytree: PyTree containing jax.Arrays to be sharded
+    shardings: A PyTree with the same structure as `pytree`, containing Sharding
+        objects or None values that specify how each corresponding array in the
+        input pytree should be sharded.
+
+  Returns:
+      A PyTree with the same structure as the input, where each array has been
+      sharded according to its corresponding specification in `shardings`.
+  """
+
+  return jax.tree.map(lambda x, s: jax.device_put(x, s), pytree, shardings)
