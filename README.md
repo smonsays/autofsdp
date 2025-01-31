@@ -1,6 +1,6 @@
 # autofsdp
 
-`autofsdp` is a utility to add Fully-Sharded Data Parallelism (FSDP) with very few lines of code using jax primitives (no magic!). 
+`autofsdp` is a utility to add Fully-Sharded Data Parallelism (FSDP) with very few lines of code using `jax` primitives (no magic!). 
 
 ## Installation
 
@@ -37,7 +37,7 @@ All of the heavy lifting is done by the excellent automatic compiler-based paral
 The only thing we need to do is to provide a sharding specification of each `jax.Array` which specifices for each axis whether it is replicated or sharded along an axis of our mesh of devices.
 
 For FSDP the mesh is one dimensional, with a single axis we call `'data'`:
-```
+```python
 mesh = jax.make_mesh((jax.device_count(),), ('data',))
 ```
 
