@@ -2,6 +2,7 @@
 name = "autofsdp"
 version = "0.1.0"
 description = "Fully-sharded data parallelism in jax with minimal code changes."
+package-data = {"autofsdp" = ["py.typed"]}
 readme = "README.md"
 authors = [
     { name = "smonsays", email = "smonsays@users.noreply.github.com" }
